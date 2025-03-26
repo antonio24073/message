@@ -22,31 +22,37 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use core\message\message;
+
+use \local_message\form\edit;   
 
 require_once(__DIR__.'/../../config.php');
 
-$PAGE->set_url(new moodle_url('/local/message/manage.php'));
+$PAGE->set_url(new moodle_url('/local/message/edit.php'));
 $PAGE->set_context(context_system::instance());
-$PAGE->set_title(get_string('manage_messages_title', 'local_message'));
-$PAGE->set_heading(get_string('manage_messages_title', 'local_message'));
-// $PAGE->set_pagelayout('standard');
-// $PAGE->set_pagetype('manage-messages');
-// $PAGE->set_url($CFG->wwwroot.'/local/message/manage.php');
+$PAGE->set_title('Edit Message');
+$PAGE->set_heading('Edit Message');
+
+
+
+
+// require_once(__DIR__.'/classes/form/edit.php');
+
+
+$mform = new edit();
+
+if ($mform->is_cancelled()) {
+    redirect($CFG->wwwroot.'/local/message/manage.php', get_string('cancelled_message', 'local_message'));
+} else if ($fromform = $mform->get_data()) {
+    $record_to_insert = new \stdClass();
+    $record_to_insert->messagetext = $fromform->messagetext;
+    $record_to_insert->messagetype = $fromform->messagetype;
+    $DB->insert_record('local_message', $record_to_insert);
+} 
 
 
 echo $OUTPUT->header();
 
-$messages = $DB->get_records('local_message');
-
-$messages = array_values($messages);
-$editurl = new moodle_url('/local/message/edit.php');
-
-$template_context = (object) [
-    'messages' => $messages,
-    'editurl' => $editurl
-];
-
-echo $OUTPUT->render_from_template('local_message/manage', $template_context);
+$mform->display();
 
 echo $OUTPUT->footer();
+

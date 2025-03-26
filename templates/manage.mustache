@@ -21,5 +21,15 @@
     Example context (json):
 }}
 
-<h1>text</h1>
-<p>{{texttodisplay}}</p>
+<h1>Messages</h1>
+
+<ul>
+    {{#messages}}
+    <li>
+        <em>{{messagetext}}</em>
+    </li>
+    {{/messages}}
+</ul>
+<br>
+
+<input type="button" class="btn btn-primary" value="Add message" onclick="window.location.href = '{{editurl}}';">

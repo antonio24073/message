@@ -27,6 +27,6 @@
 // Callback before_footer in local_message component should be migrated to new hook callback for core\hook\output\before_footer_html_generation
 // See db/hooks.php and classes/local/hook_callbacks.php
 //  function local_message_before_footer(){
-//     die("hello");
+//     echo "local_message_before_footer";
 //  }
 

@@ -27,3 +27,10 @@ $string['pluginname'] = 'message block';
 $string['local_message'] = 'message';
 $string['message:addinstance'] = 'Add a new message block';
 $string['message:myaddinstance'] = 'Add a new message block to the My Moodle page';
+
+$string['cancelled_message'] = 'You cancelled the message form.';
+$string['messagetext'] = 'Message Text';
+$string['messagetype'] = 'Message Type';
+$string['messagedefault'] = 'Please enter your message';
+$string['manage_messages_title'] = 'Manage Messages';
+

@@ -1,4 +1,6 @@
 <?php
+
+use \local_message\form\edit;
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,37 +24,26 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
-use \local_message\form\edit;   
-
-require_once(__DIR__.'/../../config.php');
+require_once __DIR__ . '/../../config.php';
 
 $PAGE->set_url(new moodle_url('/local/message/edit.php'));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title('Edit Message');
 $PAGE->set_heading('Edit Message');
 
-
-
-
 // require_once(__DIR__.'/classes/form/edit.php');
-
 
 $mform = new edit();
 
 if ($mform->is_cancelled()) {
-    redirect($CFG->wwwroot.'/local/message/manage.php', get_string('cancelled_message', 'local_message'));
+    redirect($CFG->wwwroot . '/local/message/manage.php', get_string('cancelled_message', 'local_message'));
 } else if ($fromform = $mform->get_data()) {
-    $record_to_insert = new \stdClass();
-    $record_to_insert->messagetext = $fromform->messagetext;
-    $record_to_insert->messagetype = $fromform->messagetype;
-    $DB->insert_record('local_message', $record_to_insert);
-} 
-
+    $manager  = new \local_message\manager();
+    $messages = $manager->add_message($fromform->messagetext, $fromform->messagetype);
+}
 
 echo $OUTPUT->header();
 
 $mform->display();
 
 echo $OUTPUT->footer();
-

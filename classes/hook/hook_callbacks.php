@@ -2,8 +2,9 @@
 
 namespace local_message\hook;
 
+use \local_message\manager;
+use \core\notification;
 use \core\hook\output\before_footer_html_generation;
-use stdClass;
 
 class hook_callbacks
 {
@@ -22,41 +23,29 @@ class hook_callbacks
         global $PAGE;
 
         if ($PAGE->pagetype == 'my-index') {
-            global $DB, $USER;
+            global $USER;
 
-            $params = [
-                'userid' => $USER->id
-            ];
-            $sql = "SELECT lm.id, lm.messagetext, lm.messagetype 
-                        FROM {local_message} lm
-                        LEFT OUTER JOIN {local_message_read} lmr ON lm.id = lmr.messageid
-                        WHERE lmr.userid <> :userid
-                        OR lmr.userid IS NULL";
-
-            $messages = $DB->get_records_sql($sql, $params);
+            $manager = new manager();
+            $messages = $manager->get_messages($USER->id);
 
             // $messages = $DB->get_records('local_message');
             foreach ($messages as $message) {
                 switch ($message->messagetype) {
                     case 0:
-                        \core\notification::warning($message->messagetext);
+                        notification::warning($message->messagetext);
                         break;
                     case 1:
-                        \core\notification::success($message->messagetext);
+                        notification::success($message->messagetext);
                         break;
                     case 2:
-                        \core\notification::error($message->messagetext);
+                        notification::error($message->messagetext);
                         break;
                     case 3:
-                        \core\notification::info($message->messagetext);
+                        notification::info($message->messagetext);
                         break;
                 }
 
-                $readrecord = new stdClass();
-                $readrecord->userid = $USER->id;
-                $readrecord->messageid = $message->id;
-                $readrecord->timeread = time();
-                $DB->insert_record('local_message_read', $readrecord);
+                $manager->mark_as_read($USER->id, $message->id);
             }
         }
     }

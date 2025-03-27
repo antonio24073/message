@@ -11,6 +11,7 @@ namespace local_message\hook;
 final class installation_finished {
     public function __construct(
     ) {
-        var_dump("instalação finalizada");
+        // show message after installation
+        echo get_string('installation_finished', 'local_message');
     }
 }

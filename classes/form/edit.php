@@ -11,6 +11,9 @@ class edit extends \moodleform
     {
         $mform = $this->_form;
 
+        $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
+
         $mform->addElement('text', 'messagetext', get_string('messagetext', 'local_message'));
         $mform->setType('messagetext', PARAM_NOTAGS);
         $mform->setDefault('messagetext', get_string('messagedefault', 'local_message'));

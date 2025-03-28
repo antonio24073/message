@@ -37,7 +37,7 @@ $PAGE->set_heading(get_string('manage_messages_title', 'local_message'));
 
 echo $OUTPUT->header();
 
-$messages = $DB->get_records('local_message');
+$messages = $DB->get_records('local_message', null, 'id');
 
 $messages = array_values($messages);
 $editurl = new moodle_url('/local/message/edit.php');

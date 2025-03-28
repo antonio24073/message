@@ -73,6 +73,33 @@ class manager
             return false;
         }
     }
+    public function get_message($messageid)
+    {
+        $params = [
+            'id' => $messageid
+        ];
+        try {
+            global $DB;
+            return $DB->get_record('local_message', $params);
+        } catch (\Exception $e) {
+            // echo $e->getMessage();
+            return false;
+        }
+    }
+    public function update_message($messageid, $message_text, $message_type)
+    {
+        $record_to_update = new \stdClass();
+        $record_to_update->id = $messageid;
+        $record_to_update->messagetext = $message_text;
+        $record_to_update->messagetype = $message_type;
+        try {
+            global $DB;
+            return $DB->update_record('local_message', $record_to_update, false);
+        } catch (\Exception $e) {
+            // echo $e->getMessage();
+            return false;
+        }
+    }
     public function delete_message($messageid)
     {
         $params = [

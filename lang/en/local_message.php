@@ -36,3 +36,7 @@ $string['messagetype'] = 'Message Type';
 $string['messagedefault'] = 'Please enter your message';
 $string['manage_messages_title'] = 'Manage Messages';
 
+$string['message_not_found'] = 'Message not found';
+$string['message_updated'] = 'Message updated';
+$string['message_added'] = 'Message added';
+$string['message_deleted'] = 'Message deleted';

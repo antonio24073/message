@@ -1,6 +1,7 @@
 <?php
 
 use \local_message\form\edit;
+use \local_message\manager;
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -31,15 +32,29 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_title('Edit Message');
 $PAGE->set_heading('Edit Message');
 
-// require_once(__DIR__.'/classes/form/edit.php');
+$messageid = optional_param('messageid', null, PARAM_INT);
 
 $mform = new edit();
 
 if ($mform->is_cancelled()) {
     redirect($CFG->wwwroot . '/local/message/manage.php', get_string('cancelled_message', 'local_message'));
 } else if ($fromform = $mform->get_data()) {
-    $manager  = new \local_message\manager();
+    $manager  = new manager();
+    if($fromform->id) {
+        $messages = $manager->update_message($fromform->id, $fromform->messagetext, $fromform->messagetype);
+        redirect($CFG->wwwroot . '/local/message/manage.php', get_string('message_updated', 'local_message'));
+    }
     $messages = $manager->add_message($fromform->messagetext, $fromform->messagetype);
+    redirect($CFG->wwwroot . '/local/message/manage.php', get_string('message_added', 'local_message'));
+}
+
+if($messageid) {
+    $manager  = new manager();
+    $message  = $manager->get_message($messageid);
+    if(!$message) {
+        redirect($CFG->wwwroot . '/local/message/manage.php', get_string('message_not_found', 'local_message'));
+    }
+    $mform->set_data($message);
 }
 
 echo $OUTPUT->header();
